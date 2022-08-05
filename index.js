@@ -25,7 +25,7 @@ async function welcome() {
   console.log(
     chalk.blue('If you want the default installation, just press Enter consecutively... \n'),
   );
-  await sleep(3500);
+  await sleep(2500);
   rainbowTitle.stop();
 }
 
