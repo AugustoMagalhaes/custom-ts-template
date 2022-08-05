@@ -11,6 +11,7 @@ let database;
 let hasExpress;
 let hasHttpStatusCodes = '';
 let hasExpressAsyncErrors = '';
+let hasRestifyErrors= '';
 
 const hasPackageJson = fs.existsSync('./package.json') ? 'npm init -y': '';
 
@@ -23,7 +24,7 @@ async function welcome() {
     'Welcome to the Typescript template creator!'
   );
   await sleep();
-  console.log(chalk.blue('If you want the default installation, just press Enter consecutively'));
+  console.log(chalk.blue('If you want the default installation, just press Enter consecutively... \n'));
   await sleep(3500);
   rainbowTitle.stop();
 }
@@ -116,6 +117,23 @@ async function askExpressAsyncErrorsList () {
   hasExpressAsyncErrors = answers.asyncErrors === 'Yes' ? 'express-async-errors' : '';
 }
 
+async function askRestifyErrorsList () {
+  const answers = await inquirer.prompt({
+    name: 'restifyErrors',
+    type:'list',
+    message: 'Would you like to include the "restify-errors" library to your express project?: \n',
+    choices: [
+      'Yes',
+      'No',
+    ],
+    default() {
+      return 'No'
+    }
+  })
+
+  hasRestifyErrors = answers.restifyErrors === 'Yes' ? 'restify-errors @types/restify-errors' : '';
+}
+
 Promise.all([
 await welcome(),
 await askDatabaseList(),
@@ -127,5 +145,6 @@ if (hasExpress) {
   Promise.all([
     await askHttpStatusCodesList(),
     await askExpressAsyncErrorsList(),
+    await askRestifyErrorsList(),
   ])
 }
