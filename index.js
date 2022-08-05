@@ -3,6 +3,7 @@
 import chalk from "chalk";
 import chalkAnimation from 'chalk-animation';
 import fs from 'fs';
+import inquirer from "inquirer";
 
 
 let nodeVersion;
@@ -24,6 +25,26 @@ async function welcome() {
   rainbowTitle.stop();
 }
 
+async function askDatabaseList () {
+  const answers = await inquirer.prompt({
+    name: 'Database',
+    type:'list',
+    message: 'Which database driver would you like to use with your Typescript project? \n Versions: \n',
+    choices: [
+      'mysql2',
+      'mongodb',
+      'postgres',
+    ],
+    default() {
+      return 'mysql2'
+    }
+  })
+
+  database = answers.Database;
+}
+
 Promise.all([
 await welcome(),
+await askDatabaseList(),
 ])
+
