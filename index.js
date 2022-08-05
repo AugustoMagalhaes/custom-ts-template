@@ -9,6 +9,7 @@ import inquirer from "inquirer";
 let nodeVersion;
 let database;
 let hasExpress;
+let hasHttpStatusCodes = '';
 
 const hasPackageJson = fs.existsSync('./package.json') ? 'npm init -y': '';
 
@@ -80,9 +81,33 @@ async function askExpressList () {
   hasExpress = answers.Express === 'Yes' ? 'express -D @types/express' : '';
 }
 
+async function askHttpStatusCodesList () {
+  const answers = await inquirer.prompt({
+    name: 'Http',
+    type:'list',
+    message: 'Would you like to include the "http-status-codes" library to your express project?: \n',
+    choices: [
+      'Yes',
+      'No',
+    ],
+    default() {
+      return 'No'
+    }
+  })
+
+  hasHttpStatusCodes = answers.Http === 'Yes' ? 'http-status-codes' : '';
+}
+
 Promise.all([
 await welcome(),
 await askDatabaseList(),
 await askNodeList(),
 await askExpressList(),
 ]);
+
+if (hasExpress) {
+  Promise.all([
+    await askHttpStatusCodesList(),
+  ])
+}
+
