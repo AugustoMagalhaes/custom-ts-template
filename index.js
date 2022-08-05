@@ -77,7 +77,7 @@ async function askExpressList () {
     }
   })
 
-  hasExpress = answers.Express === 'Yes' ? 'express' : '';
+  hasExpress = answers.Express === 'Yes' ? 'express -D @types/express' : '';
 }
 
 Promise.all([
