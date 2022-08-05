@@ -16,6 +16,7 @@ let hasExpress;
 let hasHttpStatusCodes = '';
 let hasExpressAsyncErrors = '';
 let hasRestifyErrors = '';
+let hasJoi = '';
 
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
@@ -117,6 +118,20 @@ async function askRestifyErrorsList() {
   hasRestifyErrors = answers.restifyErrors === 'Yes' ? 'restify-errors @types/restify-errors' : '';
 }
 
+async function askJoiList() {
+  const answers = await inquirer.prompt({
+    name: 'joi',
+    type: 'list',
+    message: 'Would you like to include the "joi" library to your express project?: \n',
+    choices: ['No', 'Yes'],
+    default() {
+      return 'No';
+    },
+  });
+
+  hasJoi = answers.joi === 'Yes' ? 'joi' : '';
+}
+
 Promise.all([
   await welcome(),
   await askDatabaseList(),
@@ -129,6 +144,7 @@ if (hasExpress) {
     await askHttpStatusCodesList(),
     await askExpressAsyncErrorsList(),
     await askRestifyErrorsList(),
+    await askJoiList(),
   ]);
 }
 
@@ -138,7 +154,7 @@ async function generateCommands() {
   const preInstall = `npm i ${database} dotenv -D typescript @types/node ts-node-dev -D @tsconfig/node${nodeVersion}`;
 
   const commands = hasExpress
-    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${hasHttpStatusCodes} ${hasExpressAsyncErrors} ${hasRestifyErrors}`
+    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${hasJoi} ${hasHttpStatusCodes} ${hasExpressAsyncErrors} ${hasRestifyErrors}`
     : `${hasPackageJson} ${preInstall}`;
 
   return commands;
