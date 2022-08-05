@@ -13,10 +13,16 @@ const asyncExec = util.promisify(exec);
 let nodeVersion;
 let database;
 let hasExpress;
-let hasHttpStatusCodes = '';
-let hasExpressAsyncErrors = '';
-let hasRestifyErrors = '';
-let hasJoi = '';
+
+let attributes = {
+  nodeVersion: '',
+  database: '',
+  hasExpress: '',
+  hasHttpStatusCodes: '',
+  hasExpressAsyncErrors: '',
+  hasRestifyErrors: '',
+  hasJoi: '',
+};
 
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
@@ -80,12 +86,12 @@ async function askExpressList() {
   hasExpress = answers.Express === 'Yes' ? 'express -D @types/express' : '';
 }
 
-async function askHttpStatusCodesList() {
+async function askYesOrNoList(lib, variable, command) {
   const answers = await inquirer.prompt({
-    name: 'Http',
+    name: lib,
     type: 'list',
     message: `Would you like to include the ${chalk.bold.green(
-      'http-status-codes',
+      lib,
     )} library to your express project?: \n`,
     choices: ['No', 'Yes'],
     default() {
@@ -93,55 +99,9 @@ async function askHttpStatusCodesList() {
     },
   });
 
-  hasHttpStatusCodes = answers.Http === 'Yes' ? 'http-status-codes' : '';
-}
+  const checkAnswer = answers[lib] === 'Yes' ? command : '';
 
-async function askExpressAsyncErrorsList() {
-  const answers = await inquirer.prompt({
-    name: 'asyncErrors',
-    type: 'list',
-    message: `Would you like to include the ${chalk.bold.green(
-      'express-async-errors',
-    )} library to your express project?: \n`,
-    choices: ['No', 'Yes'],
-    default() {
-      return 'No';
-    },
-  });
-
-  hasExpressAsyncErrors = answers.asyncErrors === 'Yes' ? 'express-async-errors' : '';
-}
-
-async function askRestifyErrorsList() {
-  const answers = await inquirer.prompt({
-    name: 'restifyErrors',
-    type: 'list',
-    message: `Would you like to include the ${chalk.bold.green(
-      'restify-errors',
-    )} library to your express project?: \n`,
-    choices: ['No', 'Yes'],
-    default() {
-      return 'No';
-    },
-  });
-
-  hasRestifyErrors = answers.restifyErrors === 'Yes' ? 'restify-errors @types/restify-errors' : '';
-}
-
-async function askJoiList() {
-  const answers = await inquirer.prompt({
-    name: 'joi',
-    type: 'list',
-    message: `Would you like to include the ${chalk.bold.green(
-      'joi',
-    )} library to your express project?: \n`,
-    choices: ['No', 'Yes'],
-    default() {
-      return 'No';
-    },
-  });
-
-  hasJoi = answers.joi === 'Yes' ? '-D joi' : '';
+  attributes[variable] = checkAnswer;
 }
 
 Promise.all([
@@ -153,10 +113,14 @@ Promise.all([
 
 if (hasExpress) {
   Promise.all([
-    await askHttpStatusCodesList(),
-    await askExpressAsyncErrorsList(),
-    await askRestifyErrorsList(),
-    await askJoiList(),
+    await askYesOrNoList('http-status-codes', 'hasHttpStatusCodes', 'http-status-codes'),
+    await askYesOrNoList('express-async-errors', 'hasExpressAsyncErrors', 'express-async-errors'),
+    await askYesOrNoList(
+      'restify-errors',
+      'hasRestifyErrors',
+      'restify-errors @types/restify-errors',
+    ),
+    await askYesOrNoList('joi', 'hasJoi', '-D joi'),
   ]);
 }
 
@@ -166,7 +130,7 @@ async function generateCommands() {
   const preInstall = `npm i ${database} dotenv -D typescript @types/node ts-node-dev -D @tsconfig/node${nodeVersion}`;
 
   const commands = hasExpress
-    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${hasJoi} ${hasHttpStatusCodes} ${hasExpressAsyncErrors} ${hasRestifyErrors}`
+    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${attributes.hasJoi} ${attributes.hasHttpStatusCodes} ${attributes.hasExpressAsyncErrors} ${attributes.hasRestifyErrors}`
     : `${hasPackageJson} ${preInstall}`;
 
   return commands;
