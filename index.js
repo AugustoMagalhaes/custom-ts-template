@@ -5,6 +5,7 @@ import chalkAnimation from 'chalk-animation';
 import { exec } from 'child_process';
 import fs from 'fs';
 import inquirer from 'inquirer';
+import { createSpinner } from 'nanospinner';
 import util from 'util';
 
 const asyncExec = util.promisify(exec);
@@ -142,3 +143,18 @@ async function generateCommands() {
 
   return commands;
 }
+
+async function installDependencies() {
+  const spinner = createSpinner(chalk.green('Installing dependencies...')).start();
+  await sleep(1000);
+  try {
+    const commands = await generateCommands();
+    const { stdout, _stderr } = await asyncExec(commands);
+    spinner.success({ text: chalk.bold.green('Dependencies installed!') });
+    return stdout;
+  } catch (e) {
+    spinner.error({ text: chalk.red(e.message) });
+  }
+}
+
+await installDependencies();
