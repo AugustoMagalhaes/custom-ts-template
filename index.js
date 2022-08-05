@@ -138,7 +138,7 @@ async function generateCommands() {
   const preInstall = `npm i ${database} dotenv -D typescript @types/node ts-node-dev -D @tsconfig/node${nodeVersion}`;
 
   const commands = hasExpress
-    ? `${hasPackageJson} ${preInstall} && npm i express ${hasHttpStatusCodes} ${hasExpressAsyncErrors} ${hasRestifyErrors}`
+    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${hasHttpStatusCodes} ${hasExpressAsyncErrors} ${hasRestifyErrors}`
     : `${hasPackageJson} ${preInstall}`;
 
   return commands;
