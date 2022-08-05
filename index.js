@@ -2,7 +2,12 @@
 
 import chalk from 'chalk';
 import chalkAnimation from 'chalk-animation';
+import { exec } from 'child_process';
+import fs from 'fs';
 import inquirer from 'inquirer';
+import util from 'util';
+
+const asyncExec = util.promisify(exec);
 
 let nodeVersion;
 let database;
