@@ -129,7 +129,7 @@ async function askJoiList() {
     },
   });
 
-  hasJoi = answers.joi === 'Yes' ? 'joi' : '';
+  hasJoi = answers.joi === 'Yes' ? '-D joi' : '';
 }
 
 Promise.all([
