@@ -8,6 +8,7 @@ import inquirer from "inquirer";
 
 let nodeVersion;
 let database;
+let hasExpress;
 
 const hasPackageJson = fs.existsSync('./package.json') ? 'npm init -y': '';
 
@@ -29,7 +30,7 @@ async function askDatabaseList () {
   const answers = await inquirer.prompt({
     name: 'Database',
     type:'list',
-    message: 'Which database driver would you like to use with your Typescript project? \n Versions: \n',
+    message: 'Which database driver would you like to use with your Typescript project? \n Drivers: \n',
     choices: [
       'mysql2',
       'mongodb',
@@ -62,9 +63,26 @@ async function askNodeList () {
   nodeVersion = answers.Node;
 }
 
+async function askExpressList () {
+  const answers = await inquirer.prompt({
+    name: 'Express',
+    type:'list',
+    message: 'Will your project use Express for backend development?: \n',
+    choices: [
+      'Yes',
+      'No',
+    ],
+    default() {
+      return 'No'
+    }
+  })
+
+  hasExpress = answers.Express === 'Yes' ? 'express' : '';
+}
+
 Promise.all([
 await welcome(),
 await askDatabaseList(),
 await askNodeList(),
+await askExpressList(),
 ]);
-
