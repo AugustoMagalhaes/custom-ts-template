@@ -10,6 +10,7 @@ let nodeVersion;
 let database;
 let hasExpress;
 let hasHttpStatusCodes = '';
+let hasExpressAsyncErrors = '';
 
 const hasPackageJson = fs.existsSync('./package.json') ? 'npm init -y': '';
 
@@ -98,6 +99,23 @@ async function askHttpStatusCodesList () {
   hasHttpStatusCodes = answers.Http === 'Yes' ? 'http-status-codes' : '';
 }
 
+async function askExpressAsyncErrorsList () {
+  const answers = await inquirer.prompt({
+    name: 'asyncErrors',
+    type:'list',
+    message: 'Would you like to include the "express-async-errors" library to your express project?: \n',
+    choices: [
+      'Yes',
+      'No',
+    ],
+    default() {
+      return 'No'
+    }
+  })
+
+  hasExpressAsyncErrors = answers.asyncErrors === 'Yes' ? 'express-async-errors' : '';
+}
+
 Promise.all([
 await welcome(),
 await askDatabaseList(),
@@ -108,6 +126,6 @@ await askExpressList(),
 if (hasExpress) {
   Promise.all([
     await askHttpStatusCodesList(),
+    await askExpressAsyncErrorsList(),
   ])
 }
-
