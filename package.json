@@ -1,14 +1,19 @@
 {
   "name": "create-ts-template",
   "version": "1.0.0",
-  "description": "",
+  "description": "Script for creating a template for Typescript with CLI",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "typescript",
+    "tsconfig",
+    "express"
+  ],
+  "author": "AugustoMagalhaes",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.0.1",
