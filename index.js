@@ -50,7 +50,7 @@ async function askNodeList() {
     type: 'list',
     message:
       'Which version of Node would you like to use with your Typescript project? \n Versions: \n',
-    choices: ['10', '12', '14', '16'],
+    choices: ['16', '14', '12', '10'],
     default() {
       return '16';
     },
@@ -64,7 +64,7 @@ async function askExpressList() {
     name: 'Express',
     type: 'list',
     message: 'Will your project use Express for backend development?: \n',
-    choices: ['Yes', 'No'],
+    choices: ['No', 'Yes'],
     default() {
       return 'No';
     },
@@ -79,7 +79,7 @@ async function askHttpStatusCodesList() {
     type: 'list',
     message:
       'Would you like to include the "http-status-codes" library to your express project?: \n',
-    choices: ['Yes', 'No'],
+    choices: ['No', 'Yes'],
     default() {
       return 'No';
     },
@@ -94,7 +94,7 @@ async function askExpressAsyncErrorsList() {
     type: 'list',
     message:
       'Would you like to include the "express-async-errors" library to your express project?: \n',
-    choices: ['Yes', 'No'],
+    choices: ['No', 'Yes'],
     default() {
       return 'No';
     },
@@ -108,7 +108,7 @@ async function askRestifyErrorsList() {
     name: 'restifyErrors',
     type: 'list',
     message: 'Would you like to include the "restify-errors" library to your express project?: \n',
-    choices: ['Yes', 'No'],
+    choices: ['No', 'Yes'],
     default() {
       return 'No';
     },
