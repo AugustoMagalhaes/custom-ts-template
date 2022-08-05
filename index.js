@@ -43,8 +43,28 @@ async function askDatabaseList () {
   database = answers.Database;
 }
 
+async function askNodeList () {
+  const answers = await inquirer.prompt({
+    name: 'Node',
+    type:'list',
+    message: 'Which version of Node would you like to use with your Typescript project? \n Versions: \n',
+    choices: [
+      '10',
+      '12',
+      '14',
+      '16'
+    ],
+    default() {
+      return '16'
+    }
+  })
+
+  nodeVersion = answers.Node;
+}
+
 Promise.all([
 await welcome(),
 await askDatabaseList(),
-])
+await askNodeList(),
+]);
 
