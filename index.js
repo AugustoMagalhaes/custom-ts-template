@@ -21,10 +21,14 @@ let hasJoi = '';
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 async function welcome() {
-  const rainbowTitle = chalkAnimation.rainbow('Welcome to the Typescript template creator!');
+  const rainbowTitle = chalkAnimation.rainbow('Welcome to the Typescript template creator! \n');
   await sleep();
   console.log(
-    chalk.blue('If you want the default installation, just press Enter consecutively... \n'),
+    chalk.yellow(
+      `*** ${chalk.underline.green(
+        'If you want the default installation, just press Enter consecutively...',
+      )} ***\n`,
+    ),
   );
   await sleep(2500);
   rainbowTitle.stop();
@@ -34,8 +38,9 @@ async function askDatabaseList() {
   const answers = await inquirer.prompt({
     name: 'Database',
     type: 'list',
-    message:
-      'Which database driver would you like to use with your Typescript project? \n Drivers: \n',
+    message: `Which ${chalk.bold.green(
+      'database',
+    )} driver would you like to use with your Typescript project? \n Drivers: \n`,
     choices: ['mysql2', 'mongodb', 'postgres'],
     default() {
       return 'mysql2';
@@ -49,8 +54,9 @@ async function askNodeList() {
   const answers = await inquirer.prompt({
     name: 'Node',
     type: 'list',
-    message:
-      'Which version of Node would you like to use with your Typescript project? \n Versions: \n',
+    message: `Which version of ${chalk.bold.green(
+      'Node',
+    )} would you like to use with your Typescript project? \n Versions: \n`,
     choices: ['16', '14', '12', '10'],
     default() {
       return '16';
@@ -64,7 +70,7 @@ async function askExpressList() {
   const answers = await inquirer.prompt({
     name: 'Express',
     type: 'list',
-    message: 'Will your project use Express for backend development?: \n',
+    message: `Will your project use ${chalk.bold.green('Express')} for backend development?: \n`,
     choices: ['No', 'Yes'],
     default() {
       return 'No';
@@ -78,8 +84,9 @@ async function askHttpStatusCodesList() {
   const answers = await inquirer.prompt({
     name: 'Http',
     type: 'list',
-    message:
-      'Would you like to include the "http-status-codes" library to your express project?: \n',
+    message: `Would you like to include the ${chalk.bold.green(
+      'http-status-codes',
+    )} library to your express project?: \n`,
     choices: ['No', 'Yes'],
     default() {
       return 'No';
@@ -93,8 +100,9 @@ async function askExpressAsyncErrorsList() {
   const answers = await inquirer.prompt({
     name: 'asyncErrors',
     type: 'list',
-    message:
-      'Would you like to include the "express-async-errors" library to your express project?: \n',
+    message: `Would you like to include the ${chalk.bold.green(
+      'express-async-errors',
+    )} library to your express project?: \n`,
     choices: ['No', 'Yes'],
     default() {
       return 'No';
@@ -108,7 +116,9 @@ async function askRestifyErrorsList() {
   const answers = await inquirer.prompt({
     name: 'restifyErrors',
     type: 'list',
-    message: 'Would you like to include the "restify-errors" library to your express project?: \n',
+    message: `Would you like to include the ${chalk.bold.green(
+      'restify-errors',
+    )} library to your express project?: \n`,
     choices: ['No', 'Yes'],
     default() {
       return 'No';
@@ -122,7 +132,9 @@ async function askJoiList() {
   const answers = await inquirer.prompt({
     name: 'joi',
     type: 'list',
-    message: 'Would you like to include the "joi" library to your express project?: \n',
+    message: `Would you like to include the ${chalk.bold.green(
+      'joi',
+    )} library to your express project?: \n`,
     choices: ['No', 'Yes'],
     default() {
       return 'No';
