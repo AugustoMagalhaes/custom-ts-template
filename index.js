@@ -22,6 +22,7 @@ let attributes = {
   hasExpressAsyncErrors: '',
   hasRestifyErrors: '',
   hasJoi: '',
+  hasNodemon: '',
 };
 
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
@@ -121,6 +122,7 @@ if (hasExpress) {
       'restify-errors @types/restify-errors',
     ),
     await askYesOrNoList('joi', 'hasJoi', '-D joi'),
+    await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
   ]);
 }
 
@@ -130,7 +132,7 @@ async function generateCommands() {
   const preInstall = `npm i ${database} dotenv -D typescript @types/node ts-node-dev -D @tsconfig/node${nodeVersion}`;
 
   const commands = hasExpress
-    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${attributes.hasJoi} ${attributes.hasHttpStatusCodes} ${attributes.hasExpressAsyncErrors} ${attributes.hasRestifyErrors}`
+    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${attributes.hasNodemon} ${attributes.hasJoi} ${attributes.hasHttpStatusCodes} ${attributes.hasExpressAsyncErrors} ${attributes.hasRestifyErrors}`
     : `${hasPackageJson} ${preInstall}`;
 
   return commands;
