@@ -10,10 +10,6 @@ import util from 'util';
 
 const asyncExec = util.promisify(exec);
 
-let nodeVersion;
-let database;
-let hasExpress;
-
 let attributes = {
   nodeVersion: '',
   database: '',
@@ -54,7 +50,7 @@ async function askDatabaseList() {
     },
   });
 
-  database = answers.Database;
+  attributes['database'] = answers.Database;
 }
 
 async function askNodeList() {
@@ -70,7 +66,7 @@ async function askNodeList() {
     },
   });
 
-  nodeVersion = answers.Node;
+  attributes['nodeVersion'] = answers.Node;
 }
 
 async function askExpressList() {
@@ -84,7 +80,7 @@ async function askExpressList() {
     },
   });
 
-  hasExpress = answers.Express === 'Yes' ? 'express -D @types/express' : '';
+  attributes['hasExpress'] = answers.Express === 'Yes' ? 'express -D @types/express' : '';
 }
 
 async function askYesOrNoList(lib, variable, command) {
@@ -112,7 +108,7 @@ Promise.all([
   await askExpressList(),
 ]);
 
-if (hasExpress) {
+if (attributes.hasExpress) {
   Promise.all([
     await askYesOrNoList('http-status-codes', 'hasHttpStatusCodes', 'http-status-codes'),
     await askYesOrNoList('express-async-errors', 'hasExpressAsyncErrors', 'express-async-errors'),
@@ -129,10 +125,10 @@ if (hasExpress) {
 async function generateCommands() {
   const hasPackageJson = fs.existsSync('./package.json') ? '' : 'npm init -y &&';
 
-  const preInstall = `npm i ${database} dotenv -D typescript @types/node ts-node-dev -D @tsconfig/node${nodeVersion}`;
+  const preInstall = `npm i ${attributes.database} dotenv -D typescript @types/node ts-node-dev -D @tsconfig/node${attributes.nodeVersion}`;
 
-  const commands = hasExpress
-    ? `${hasPackageJson} ${preInstall} && npm i ${hasExpress} ${attributes.hasNodemon} ${attributes.hasJoi} ${attributes.hasHttpStatusCodes} ${attributes.hasExpressAsyncErrors} ${attributes.hasRestifyErrors}`
+  const commands = attributes.hasExpress
+    ? `${hasPackageJson} ${preInstall} && npm i ${attributes.hasExpress} ${attributes.hasNodemon} ${attributes.hasJoi} ${attributes.hasHttpStatusCodes} ${attributes.hasExpressAsyncErrors} ${attributes.hasRestifyErrors}`
     : `${hasPackageJson} ${preInstall}`;
 
   return commands;
