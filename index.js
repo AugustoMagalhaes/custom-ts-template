@@ -19,6 +19,7 @@ let prod = {
   hasHttpStatusCodes: '',
   hasExpressAsyncErrors: '',
   hasRestifyErrors: '',
+  hasHelmet: '',
 };
 
 let dev = {
@@ -143,6 +144,7 @@ if (prod.hasExpress) {
     ),
     await askYesOrNoList('joi', 'hasJoi', 'joi'),
     await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
+    await askYesOrNoList('helmet', 'hasHelmet', 'helmet'),
   ]);
 }
 
