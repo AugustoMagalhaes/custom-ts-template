@@ -15,6 +15,7 @@ let nodeVersion = '';
 let prod = {
   database: '',
   hasExpress: '',
+  dotenv: 'dotenv',
   hasHttpStatusCodes: '',
   hasExpressAsyncErrors: '',
   hasRestifyErrors: '',
@@ -25,6 +26,9 @@ let dev = {
   hasRestifyErrors: '',
   hasJoi: '',
   hasNodemon: '',
+  typescript: 'typescript',
+  typeNodes: '@types/node',
+  tsNodeDev: 'ts-node-dev',
 };
 
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
@@ -144,8 +148,8 @@ if (prod.hasExpress) {
 
 async function commandReducer(obj) {
   const objValues = Object.values(obj);
-  console.log('values', objValues);
-  const allCommands = objValues.reduce((acc, curr) => {
+
+  const allCommands = await objValues.reduce((acc, curr) => {
     if (curr) {
       acc = acc.concat(' ').concat(curr);
     }
@@ -158,13 +162,14 @@ async function commandReducer(obj) {
 async function generateCommands() {
   const hasPackageJson = fs.existsSync('./package.json') ? '' : 'npm init -y &&';
 
-  const preInstall = `npm i ${prod.database} dotenv typescript @types/node ts-node-dev -D @tsconfig/node${nodeVersion}`;
+  const [prodSetup, devSetup] = await Promise.all([commandReducer(prod), commandReducer(dev)]);
 
-  const commands = prod.hasExpress
-    ? `${hasPackageJson} ${preInstall} && npm i ${prod.hasExpress} ${dev.hasNodemon} ${dev.hasJoi} ${prod.hasHttpStatusCodes} ${prod.hasExpressAsyncErrors} ${prod.hasRestifyErrors}`
-    : `${hasPackageJson} ${preInstall}`;
+  const prodCommands = `npm i ${prodSetup}`;
+  const devCommands = `npm i -D ${devSetup} @tsconfig/node${nodeVersion}`;
 
-  return commands;
+  return hasPackageJson
+    ? `${hasPackageJson} && ${prodCommands} && ${devCommands}`
+    : `${prodCommands} && ${devCommands}`;
 }
 
 async function installDependencies() {
