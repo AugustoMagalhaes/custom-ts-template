@@ -20,6 +20,7 @@ let prod = {
   hasExpressAsyncErrors: '',
   hasRestifyErrors: '',
   hasHelmet: '',
+  hasJWT: '',
 };
 
 let dev = {
@@ -30,6 +31,7 @@ let dev = {
   typescript: 'typescript',
   typeNodes: '@types/node',
   tsNodeDev: 'ts-node-dev',
+  hasMorgan: '',
 };
 
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
@@ -145,6 +147,8 @@ if (prod.hasExpress) {
     await askYesOrNoList('joi', 'hasJoi', 'joi'),
     await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
     await askYesOrNoList('helmet', 'hasHelmet', 'helmet'),
+    await askYesOrNoList('morgan', 'hasMorgan', 'morgan'),
+    await askYesOrNoList('jsonwebtoken', 'hasJWT', 'jsonwebtoken'),
   ]);
 }
 
