@@ -10,8 +10,9 @@ import util from 'util';
 
 const asyncExec = util.promisify(exec);
 
+let nodeVersion = '';
+
 let prod = {
-  nodeVersion: '',
   database: '',
   hasExpress: '',
   hasHttpStatusCodes: '',
@@ -71,7 +72,7 @@ async function askNodeList() {
     },
   });
 
-  prod['nodeVersion'] = answers.Node;
+  nodeVersion = answers.Node;
 }
 
 async function askExpressList() {
@@ -86,8 +87,7 @@ async function askExpressList() {
   });
 
   const checkAnswer = answers.Express === 'Yes';
-  /*   prod['hasExpress'] = checkAnswer ? 'express' : '';
-  dev['hasExpress'] = checkAnswer ? '@types/express' : ''; */
+
   [prod['hasExpress'], dev['hasExpress']] = checkAnswer ? ['express', '@types/express'] : ['', ''];
 }
 
@@ -142,10 +142,23 @@ if (prod.hasExpress) {
   ]);
 }
 
+async function commandReducer(obj) {
+  const objValues = Object.values(obj);
+  console.log('values', objValues);
+  const allCommands = objValues.reduce((acc, curr) => {
+    if (curr) {
+      acc = acc.concat(' ').concat(curr);
+    }
+    return acc;
+  }, '');
+
+  return allCommands;
+}
+
 async function generateCommands() {
   const hasPackageJson = fs.existsSync('./package.json') ? '' : 'npm init -y &&';
 
-  const preInstall = `npm i ${prod.database} dotenv typescript @types/node ts-node-dev -D @tsconfig/node${prod.nodeVersion}`;
+  const preInstall = `npm i ${prod.database} dotenv typescript @types/node ts-node-dev -D @tsconfig/node${nodeVersion}`;
 
   const commands = prod.hasExpress
     ? `${hasPackageJson} ${preInstall} && npm i ${prod.hasExpress} ${dev.hasNodemon} ${dev.hasJoi} ${prod.hasHttpStatusCodes} ${prod.hasExpressAsyncErrors} ${prod.hasRestifyErrors}`
