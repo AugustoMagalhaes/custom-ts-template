@@ -10,12 +10,17 @@ import util from 'util';
 
 const asyncExec = util.promisify(exec);
 
-let attributes = {
+let prod = {
   nodeVersion: '',
   database: '',
   hasExpress: '',
   hasHttpStatusCodes: '',
   hasExpressAsyncErrors: '',
+  hasRestifyErrors: '',
+};
+
+let dev = {
+  hasExpress: '',
   hasRestifyErrors: '',
   hasJoi: '',
   hasNodemon: '',
@@ -50,7 +55,7 @@ async function askDatabaseList() {
     },
   });
 
-  attributes['database'] = answers.Database;
+  prod['database'] = answers.Database;
 }
 
 async function askNodeList() {
@@ -66,7 +71,7 @@ async function askNodeList() {
     },
   });
 
-  attributes['nodeVersion'] = answers.Node;
+  prod['nodeVersion'] = answers.Node;
 }
 
 async function askExpressList() {
@@ -80,7 +85,17 @@ async function askExpressList() {
     },
   });
 
-  attributes['hasExpress'] = answers.Express === 'Yes' ? 'express -D @types/express' : '';
+  const checkAnswer = answers.Express === 'Yes';
+  /*   prod['hasExpress'] = checkAnswer ? 'express' : '';
+  dev['hasExpress'] = checkAnswer ? '@types/express' : ''; */
+  [prod['hasExpress'], dev['hasExpress']] = checkAnswer ? ['express', '@types/express'] : ['', ''];
+}
+
+function checkComplementaryLib(variable, checkAnswer) {
+  const checkLib = Object.keys(dev).includes(variable);
+  if (checkLib) {
+    dev[variable] = checkAnswer.split(' ')[1] || '';
+  }
 }
 
 async function askYesOrNoList(lib, variable, command) {
@@ -98,7 +113,12 @@ async function askYesOrNoList(lib, variable, command) {
 
   const checkAnswer = answers[lib] === 'Yes' ? command : '';
 
-  attributes[variable] = checkAnswer;
+  if (Object.keys(prod).includes(variable)) {
+    prod[variable] = checkAnswer.split(' ')[0];
+    checkComplementaryLib(variable, checkAnswer);
+  } else {
+    dev[variable] = checkAnswer;
+  }
 }
 
 Promise.all([
@@ -108,7 +128,7 @@ Promise.all([
   await askExpressList(),
 ]);
 
-if (attributes.hasExpress) {
+if (prod.hasExpress) {
   Promise.all([
     await askYesOrNoList('http-status-codes', 'hasHttpStatusCodes', 'http-status-codes'),
     await askYesOrNoList('express-async-errors', 'hasExpressAsyncErrors', 'express-async-errors'),
@@ -117,7 +137,7 @@ if (attributes.hasExpress) {
       'hasRestifyErrors',
       'restify-errors @types/restify-errors',
     ),
-    await askYesOrNoList('joi', 'hasJoi', '-D joi'),
+    await askYesOrNoList('joi', 'hasJoi', 'joi'),
     await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
   ]);
 }
@@ -125,10 +145,10 @@ if (attributes.hasExpress) {
 async function generateCommands() {
   const hasPackageJson = fs.existsSync('./package.json') ? '' : 'npm init -y &&';
 
-  const preInstall = `npm i ${attributes.database} dotenv -D typescript @types/node ts-node-dev -D @tsconfig/node${attributes.nodeVersion}`;
+  const preInstall = `npm i ${prod.database} dotenv typescript @types/node ts-node-dev -D @tsconfig/node${prod.nodeVersion}`;
 
-  const commands = attributes.hasExpress
-    ? `${hasPackageJson} ${preInstall} && npm i ${attributes.hasExpress} ${attributes.hasNodemon} ${attributes.hasJoi} ${attributes.hasHttpStatusCodes} ${attributes.hasExpressAsyncErrors} ${attributes.hasRestifyErrors}`
+  const commands = prod.hasExpress
+    ? `${hasPackageJson} ${preInstall} && npm i ${prod.hasExpress} ${dev.hasNodemon} ${dev.hasJoi} ${prod.hasHttpStatusCodes} ${prod.hasExpressAsyncErrors} ${prod.hasRestifyErrors}`
     : `${hasPackageJson} ${preInstall}`;
 
   return commands;
