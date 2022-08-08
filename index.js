@@ -21,6 +21,7 @@ let prod = {
   hasRestifyErrors: '',
   hasHelmet: '',
   hasJWT: '',
+  hasBodyParser: '',
 };
 
 let dev = {
@@ -146,6 +147,7 @@ if (prod.hasExpress) {
     ),
     await askYesOrNoList('joi', 'hasJoi', 'joi'),
     await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
+    await askYesOrNoList('body-parser', 'hasBodyParser', 'body-parser'),
     await askYesOrNoList('helmet', 'hasHelmet', 'helmet'),
     await askYesOrNoList('morgan', 'hasMorgan', 'morgan'),
     await askYesOrNoList('jsonwebtoken', 'hasJWT', 'jsonwebtoken'),
