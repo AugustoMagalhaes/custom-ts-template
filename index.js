@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+'use strict';
 import chalk from 'chalk';
 import chalkAnimation from 'chalk-animation';
 import { exec } from 'child_process';
@@ -12,31 +12,8 @@ const asyncExec = util.promisify(exec);
 
 let nodeVersion = '';
 
-let prodEnv = {
-  database: '',
-  hasExpress: '',
-  dotenv: 'dotenv',
-  hasHttpStatusCodes: '',
-  hasExpressAsyncErrors: '',
-  hasRestifyErrors: '',
-  hasHelmet: '',
-  hasJWT: '',
-  hasBodyParser: '',
-  hasCors: '',
-  hasCookieParser: '',
-  hasPassport: '',
-};
-
-let devEnv = {
-  hasExpress: '',
-  hasRestifyErrors: '',
-  hasJoi: '',
-  hasNodemon: '',
-  typescript: 'typescript',
-  typeNodes: '@types/node',
-  tsNodeDev: 'ts-node-dev',
-  hasMorgan: '',
-};
+let prodDependencies = new Set(['dotenv']);
+let devDependencies = new Set(['typescript', '@types/node', 'ts-node-dev']);
 
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
@@ -59,8 +36,8 @@ async function welcome() {
 }
 
 async function askDatabaseDriver() {
-  const answers = await inquirer.prompt({
-    name: 'Database',
+  const answer = await inquirer.prompt({
+    name: 'dbDriver',
     type: 'list',
     message: `Which ${chalk.bold.green(
       'database',
@@ -71,12 +48,12 @@ async function askDatabaseDriver() {
     },
   });
 
-  prodEnv['database'] = answers.Database;
+  prodDependencies.add(answer.dbDriver);
 }
 
 async function askNodeVersion() {
-  const answers = await inquirer.prompt({
-    name: 'Node',
+  const answer = await inquirer.prompt({
+    name: 'node',
     type: 'list',
     message: `Which version of ${chalk.bold.green(
       'Node',
@@ -87,109 +64,80 @@ async function askNodeVersion() {
     },
   });
 
-  nodeVersion = answers.Node;
+  nodeVersion = answer.node;
 }
 
-async function askExpressOptions() {
-  const answers = await inquirer.prompt({
-    name: 'Express',
-    type: 'list',
-    message: `Will your project use ${chalk.bold.green('Express')} for backend development?: \n`,
-    choices: ['No', 'Yes'],
-    default() {
-      return 'No';
-    },
-  });
-
-  const checkAnswer = answers.Express === 'Yes';
-
-  [prodEnv['hasExpress'], devEnv['hasExpress']] = checkAnswer
-    ? ['express', '@types/express']
-    : ['', ''];
+function checkExpress() {
+  return prodDependencies.has('express') ? 'express ' : '';
 }
 
-function checkComplementaryLib(variable, checkAnswer) {
-  const checkLib = Object.keys(devEnv).includes(variable);
-  if (checkLib) {
-    devEnv[variable] = checkAnswer.split(' ')[1] || '';
-  }
-}
+let messages = {
+  mostFrequent: `Would you like to include the ${chalk.bold.green(
+    '*',
+  )} library to your <>project?: \n`,
+};
 
-async function askYesOrNoOptions(lib, variable, command) {
-  const answers = await inquirer.prompt({
+async function askYesOrNoOptions(lib, isDev = false, command = lib) {
+  const answer = await inquirer.prompt({
     name: lib,
     type: 'list',
-    message: `Would you like to include the ${chalk.bold.green(lib)} library to your ${
-      prodEnv.hasExpress && 'express '
-    }project?: \n`,
+    message: messages.mostFrequent.replace('*', lib).replace('<>', checkExpress),
     choices: ['No', 'Yes'],
     default() {
       return 'No';
     },
   });
 
-  const checkAnswer = answers[lib] === 'Yes' ? command : '';
-
-  if (Object.keys(prodEnv).includes(variable)) {
-    prodEnv[variable] = checkAnswer.split(' ')[0];
-    checkComplementaryLib(variable, checkAnswer);
-  } else {
-    devEnv[variable] = checkAnswer;
+  const checkAnswer = answer[lib] === 'Yes' ? command : '';
+  if (isDev) {
+    devDependencies.add(command);
+    return;
   }
+
+  // Condition for when command has multiple assignments -> e.g. 'express @types/express'
+  const [prodEnv, devEnv] = checkAnswer.split(' ');
+  prodEnv && prodDependencies.add(prodEnv);
+  devEnv && devDependencies.add(devEnv);
 }
 
 Promise.all([
   await welcome(),
   await askDatabaseDriver(),
   await askNodeVersion(),
-  await askExpressOptions(),
-  await askYesOrNoOptions('nodemon', 'hasNodemon', 'nodemon'),
+  await askYesOrNoOptions('express', false, 'express @types/express'),
+  await askYesOrNoOptions('nodemon', true),
 ]);
 
-if (prodEnv.hasExpress) {
+if (prodDependencies.has('express')) {
   Promise.all([
-    await askYesOrNoOptions('http-status-codes', 'hasHttpStatusCodes', 'http-status-codes'),
-    await askYesOrNoOptions(
-      'express-async-errors',
-      'hasExpressAsyncErrors',
-      'express-async-errors',
-    ),
-    await askYesOrNoOptions(
-      'restify-errors',
-      'hasRestifyErrors',
-      'restify-errors @types/restify-errors',
-    ),
-    await askYesOrNoOptions('joi', 'hasJoi', 'joi'),
-    await askYesOrNoOptions('body-parser', 'hasBodyParser', 'body-parser'),
-    await askYesOrNoOptions('cors', 'hasCors', 'cors'),
-    await askYesOrNoOptions('helmet', 'hasHelmet', 'helmet'),
-    await askYesOrNoOptions('morgan', 'hasMorgan', 'morgan'),
-    await askYesOrNoOptions('jsonwebtoken', 'hasJWT', 'jsonwebtoken'),
-    await askYesOrNoOptions('cookie-parser', 'hasCookieParser', 'cookie-parser'),
-    await askYesOrNoOptions('passport', 'hasPassport', 'passport'),
+    await askYesOrNoOptions('http-status-codes'),
+    await askYesOrNoOptions('express-async-errors'),
+    await askYesOrNoOptions('restify-errors', false, 'restify-errors @types/restify-errors'),
+    await askYesOrNoOptions('joi', true),
+    await askYesOrNoOptions('body-parser'),
+    await askYesOrNoOptions('cors'),
+    await askYesOrNoOptions('helmet'),
+    await askYesOrNoOptions('morgan', true),
+    await askYesOrNoOptions('jsonwebtoken'),
+    await askYesOrNoOptions('cookie-parser'),
+    await askYesOrNoOptions('passport'),
   ]);
 }
 
-async function commandReducer(obj) {
-  const objValues = Object.values(obj);
+function joinSetElements(set) {
+  const arrayFromSet = [...set];
+  const joinedElements = arrayFromSet.join(' ');
 
-  const allCommands = await objValues.reduce((acc, curr) => {
-    if (curr) {
-      acc = acc.concat(' ').concat(curr);
-    }
-    return acc;
-  }, '');
-
-  return allCommands;
+  return joinedElements;
 }
 
-async function generateCommands() {
+function generateCommands() {
   const hasPackageJson = fs.existsSync('./package.json') ? '' : 'npm init -y &&';
 
-  const [prodSetup, devSetup] = await Promise.all([
-    commandReducer(prodEnv),
-    commandReducer(devEnv),
-  ]);
+  const [prodSetup, devSetup] = [
+    joinSetElements(prodDependencies),
+    joinSetElements(devDependencies),
+  ];
 
   const prodCommands = `npm i ${prodSetup}`;
   const devCommands = `npm i -D ${devSetup} @tsconfig/node${nodeVersion}`;
@@ -203,7 +151,7 @@ async function installDependencies() {
   const spinner = createSpinner(chalk.green('Installing dependencies...')).start();
   await sleep(1000);
   try {
-    const commands = await generateCommands();
+    const commands = generateCommands();
     const { stdout, _stderr } = await asyncExec(commands);
     spinner.success({ text: chalk.bold.green('Dependencies installed!') });
     return stdout;
