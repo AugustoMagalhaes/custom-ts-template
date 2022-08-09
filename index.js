@@ -23,6 +23,7 @@ let prod = {
   hasJWT: '',
   hasBodyParser: '',
   hasCors: '',
+  hasCookieParser: '',
 };
 
 let dev = {
@@ -40,7 +41,9 @@ const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 async function welcome() {
   const rainbowTitle = chalkAnimation.rainbow('Welcome to the Typescript template creator! \n');
+
   await sleep();
+
   console.log(
     chalk.yellow(
       `*** ${chalk.underline.green(
@@ -48,6 +51,7 @@ async function welcome() {
       )} ***\n`,
     ),
   );
+
   await sleep(2500);
   rainbowTitle.stop();
 }
@@ -111,9 +115,9 @@ async function askYesOrNoList(lib, variable, command) {
   const answers = await inquirer.prompt({
     name: lib,
     type: 'list',
-    message: `Would you like to include the ${chalk.bold.green(
-      lib,
-    )} library to your express project?: \n`,
+    message: `Would you like to include the ${chalk.bold.green(lib)} library to your ${
+      prod.hasExpress && 'express '
+    }project?: \n`,
     choices: ['No', 'Yes'],
     default() {
       return 'No';
@@ -153,6 +157,7 @@ if (prod.hasExpress) {
     await askYesOrNoList('helmet', 'hasHelmet', 'helmet'),
     await askYesOrNoList('morgan', 'hasMorgan', 'morgan'),
     await askYesOrNoList('jsonwebtoken', 'hasJWT', 'jsonwebtoken'),
+    await askYesOrNoList('cookie-parser', 'hasCookieParser', 'cookie-parser'),
   ]);
 }
 
