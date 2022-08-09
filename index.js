@@ -24,6 +24,7 @@ let prod = {
   hasBodyParser: '',
   hasCors: '',
   hasCookieParser: '',
+  hasPassport: '',
 };
 
 let dev = {
@@ -159,6 +160,7 @@ if (prod.hasExpress) {
     await askYesOrNoList('morgan', 'hasMorgan', 'morgan'),
     await askYesOrNoList('jsonwebtoken', 'hasJWT', 'jsonwebtoken'),
     await askYesOrNoList('cookie-parser', 'hasCookieParser', 'cookie-parser'),
+    await askYesOrNoList('passport', 'hasPassport', 'passport'),
   ]);
 }
 
