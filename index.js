@@ -12,7 +12,7 @@ const asyncExec = util.promisify(exec);
 
 let nodeVersion = '';
 
-let prod = {
+let prodEnv = {
   database: '',
   hasExpress: '',
   dotenv: 'dotenv',
@@ -27,7 +27,7 @@ let prod = {
   hasPassport: '',
 };
 
-let dev = {
+let devEnv = {
   hasExpress: '',
   hasRestifyErrors: '',
   hasJoi: '',
@@ -58,7 +58,7 @@ async function welcome() {
   rainbowTitle.stop();
 }
 
-async function askDatabaseList() {
+async function askDatabaseDriver() {
   const answers = await inquirer.prompt({
     name: 'Database',
     type: 'list',
@@ -71,10 +71,10 @@ async function askDatabaseList() {
     },
   });
 
-  prod['database'] = answers.Database;
+  prodEnv['database'] = answers.Database;
 }
 
-async function askNodeList() {
+async function askNodeVersion() {
   const answers = await inquirer.prompt({
     name: 'Node',
     type: 'list',
@@ -90,7 +90,7 @@ async function askNodeList() {
   nodeVersion = answers.Node;
 }
 
-async function askExpressList() {
+async function askExpressOptions() {
   const answers = await inquirer.prompt({
     name: 'Express',
     type: 'list',
@@ -103,22 +103,24 @@ async function askExpressList() {
 
   const checkAnswer = answers.Express === 'Yes';
 
-  [prod['hasExpress'], dev['hasExpress']] = checkAnswer ? ['express', '@types/express'] : ['', ''];
+  [prodEnv['hasExpress'], devEnv['hasExpress']] = checkAnswer
+    ? ['express', '@types/express']
+    : ['', ''];
 }
 
 function checkComplementaryLib(variable, checkAnswer) {
-  const checkLib = Object.keys(dev).includes(variable);
+  const checkLib = Object.keys(devEnv).includes(variable);
   if (checkLib) {
-    dev[variable] = checkAnswer.split(' ')[1] || '';
+    devEnv[variable] = checkAnswer.split(' ')[1] || '';
   }
 }
 
-async function askYesOrNoList(lib, variable, command) {
+async function askYesOrNoOptions(lib, variable, command) {
   const answers = await inquirer.prompt({
     name: lib,
     type: 'list',
     message: `Would you like to include the ${chalk.bold.green(lib)} library to your ${
-      prod.hasExpress && 'express '
+      prodEnv.hasExpress && 'express '
     }project?: \n`,
     choices: ['No', 'Yes'],
     default() {
@@ -128,39 +130,43 @@ async function askYesOrNoList(lib, variable, command) {
 
   const checkAnswer = answers[lib] === 'Yes' ? command : '';
 
-  if (Object.keys(prod).includes(variable)) {
-    prod[variable] = checkAnswer.split(' ')[0];
+  if (Object.keys(prodEnv).includes(variable)) {
+    prodEnv[variable] = checkAnswer.split(' ')[0];
     checkComplementaryLib(variable, checkAnswer);
   } else {
-    dev[variable] = checkAnswer;
+    devEnv[variable] = checkAnswer;
   }
 }
 
 Promise.all([
   await welcome(),
-  await askDatabaseList(),
-  await askNodeList(),
-  await askExpressList(),
-  await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
+  await askDatabaseDriver(),
+  await askNodeVersion(),
+  await askExpressOptions(),
+  await askYesOrNoOptions('nodemon', 'hasNodemon', 'nodemon'),
 ]);
 
-if (prod.hasExpress) {
+if (prodEnv.hasExpress) {
   Promise.all([
-    await askYesOrNoList('http-status-codes', 'hasHttpStatusCodes', 'http-status-codes'),
-    await askYesOrNoList('express-async-errors', 'hasExpressAsyncErrors', 'express-async-errors'),
-    await askYesOrNoList(
+    await askYesOrNoOptions('http-status-codes', 'hasHttpStatusCodes', 'http-status-codes'),
+    await askYesOrNoOptions(
+      'express-async-errors',
+      'hasExpressAsyncErrors',
+      'express-async-errors',
+    ),
+    await askYesOrNoOptions(
       'restify-errors',
       'hasRestifyErrors',
       'restify-errors @types/restify-errors',
     ),
-    await askYesOrNoList('joi', 'hasJoi', 'joi'),
-    await askYesOrNoList('body-parser', 'hasBodyParser', 'body-parser'),
-    await askYesOrNoList('cors', 'hasCors', 'cors'),
-    await askYesOrNoList('helmet', 'hasHelmet', 'helmet'),
-    await askYesOrNoList('morgan', 'hasMorgan', 'morgan'),
-    await askYesOrNoList('jsonwebtoken', 'hasJWT', 'jsonwebtoken'),
-    await askYesOrNoList('cookie-parser', 'hasCookieParser', 'cookie-parser'),
-    await askYesOrNoList('passport', 'hasPassport', 'passport'),
+    await askYesOrNoOptions('joi', 'hasJoi', 'joi'),
+    await askYesOrNoOptions('body-parser', 'hasBodyParser', 'body-parser'),
+    await askYesOrNoOptions('cors', 'hasCors', 'cors'),
+    await askYesOrNoOptions('helmet', 'hasHelmet', 'helmet'),
+    await askYesOrNoOptions('morgan', 'hasMorgan', 'morgan'),
+    await askYesOrNoOptions('jsonwebtoken', 'hasJWT', 'jsonwebtoken'),
+    await askYesOrNoOptions('cookie-parser', 'hasCookieParser', 'cookie-parser'),
+    await askYesOrNoOptions('passport', 'hasPassport', 'passport'),
   ]);
 }
 
@@ -180,7 +186,10 @@ async function commandReducer(obj) {
 async function generateCommands() {
   const hasPackageJson = fs.existsSync('./package.json') ? '' : 'npm init -y &&';
 
-  const [prodSetup, devSetup] = await Promise.all([commandReducer(prod), commandReducer(dev)]);
+  const [prodSetup, devSetup] = await Promise.all([
+    commandReducer(prodEnv),
+    commandReducer(devEnv),
+  ]);
 
   const prodCommands = `npm i ${prodSetup}`;
   const devCommands = `npm i -D ${devSetup} @tsconfig/node${nodeVersion}`;
