@@ -40,6 +40,7 @@ let dev = {
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 async function welcome() {
+  console.clear();
   const rainbowTitle = chalkAnimation.rainbow('Welcome to the Typescript template creator! \n');
 
   await sleep();
