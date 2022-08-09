@@ -135,6 +135,7 @@ Promise.all([
   await askDatabaseList(),
   await askNodeList(),
   await askExpressList(),
+  await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
 ]);
 
 if (prod.hasExpress) {
@@ -147,7 +148,6 @@ if (prod.hasExpress) {
       'restify-errors @types/restify-errors',
     ),
     await askYesOrNoList('joi', 'hasJoi', 'joi'),
-    await askYesOrNoList('nodemon', 'hasNodemon', 'nodemon'),
     await askYesOrNoList('body-parser', 'hasBodyParser', 'body-parser'),
     await askYesOrNoList('cors', 'hasCors', 'cors'),
     await askYesOrNoList('helmet', 'hasHelmet', 'helmet'),
