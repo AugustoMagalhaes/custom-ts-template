@@ -19,6 +19,7 @@ const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 async function welcome() {
   console.clear();
+
   const rainbowTitle = chalkAnimation.rainbow('Welcome to the Typescript template creator! \n');
 
   await sleep();
@@ -149,10 +150,12 @@ function generateCommands() {
 
 async function installDependencies() {
   const spinner = createSpinner(chalk.green('Installing dependencies...')).start();
-  await sleep(1000);
+
   try {
     const commands = generateCommands();
+
     const { stdout, _stderr } = await asyncExec(commands);
+
     spinner.success({ text: chalk.bold.green('Dependencies installed!') });
     return stdout;
   } catch (e) {
