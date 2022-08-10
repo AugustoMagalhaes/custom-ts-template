@@ -167,4 +167,7 @@ async function main() {
   await installDependencies();
 }
 
-await main();
+// check if file is main module to avoid autorun when importing index.js
+if (import.meta.url === `file://${process.argv[1]}`) {
+  await main();
+}
