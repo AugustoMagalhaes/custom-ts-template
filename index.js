@@ -101,30 +101,6 @@ async function askYesOrNoOptions(lib, isDev = false, command = lib) {
   devEnv && devDependencies.add(devEnv);
 }
 
-Promise.all([
-  await welcome(),
-  await askDatabaseDriver(),
-  await askNodeVersion(),
-  await askYesOrNoOptions('express', false, 'express @types/express'),
-  await askYesOrNoOptions('nodemon', true),
-]);
-
-if (prodDependencies.has('express')) {
-  Promise.all([
-    await askYesOrNoOptions('http-status-codes'),
-    await askYesOrNoOptions('express-async-errors'),
-    await askYesOrNoOptions('restify-errors', false, 'restify-errors @types/restify-errors'),
-    await askYesOrNoOptions('joi', true),
-    await askYesOrNoOptions('body-parser'),
-    await askYesOrNoOptions('cors'),
-    await askYesOrNoOptions('helmet'),
-    await askYesOrNoOptions('morgan', true),
-    await askYesOrNoOptions('jsonwebtoken'),
-    await askYesOrNoOptions('cookie-parser'),
-    await askYesOrNoOptions('passport'),
-  ]);
-}
-
 function joinSetElements(set) {
   const arrayFromSet = [...set];
   const joinedElements = arrayFromSet.join(' ');
@@ -163,4 +139,32 @@ async function installDependencies() {
   }
 }
 
-await installDependencies();
+async function main() {
+  Promise.all([
+    await welcome(),
+    await askDatabaseDriver(),
+    await askNodeVersion(),
+    await askYesOrNoOptions('nodemon', true),
+    await askYesOrNoOptions('express', false, 'express @types/express'),
+  ]);
+
+  if (prodDependencies.has('express')) {
+    Promise.all([
+      await askYesOrNoOptions('http-status-codes'),
+      await askYesOrNoOptions('express-async-errors'),
+      await askYesOrNoOptions('restify-errors', false, 'restify-errors @types/restify-errors'),
+      await askYesOrNoOptions('joi', true),
+      await askYesOrNoOptions('body-parser'),
+      await askYesOrNoOptions('cors'),
+      await askYesOrNoOptions('helmet'),
+      await askYesOrNoOptions('morgan', true),
+      await askYesOrNoOptions('jsonwebtoken'),
+      await askYesOrNoOptions('cookie-parser'),
+      await askYesOrNoOptions('passport'),
+    ]);
+  }
+
+  await installDependencies();
+}
+
+await main();
