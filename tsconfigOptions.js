@@ -8,3 +8,16 @@ const customTsconfig = new Map([
   ['--forceConsistentCasingInFileNames', ['true', 'false']],
   ['--preserveConstEnums', ['true', 'false']],
 ]);
+
+const tsconfigDocUrl = 'https://www.typescriptlang.org/tsconfig';
+
+const tsconfigInfo = new Map([
+  ['--target', `(${tsconfigDocUrl}#target)`],
+  ['--module', `(${tsconfigDocUrl}#module)`],
+  ['--allowJs', `(${tsconfigDocUrl}#allowJs)`],
+  ['--strict', `(${tsconfigDocUrl}#strict)`],
+  ['--esModuleInterop', `(${tsconfigDocUrl}#esModuleInterop)`],
+  ['--skipLibCheck', `(${tsconfigDocUrl}#skipDefaultLibCheck`],
+  ['--forceConsistentCasingInFileNames', `(${tsconfigDocUrl}#forceConsistentCasingInFileNames)`],
+  ['--preserveConstEnums', `(${tsconfigDocUrl}#preserveConstEnums)`],
+]);
