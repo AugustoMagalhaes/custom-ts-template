@@ -57,3 +57,12 @@ async function askRootAndOutdir(dirOption, dirDefault) {
   });
   customTsconfig.set(dirOption, answers[dirOption]);
 }
+
+function generateTsconfigCommand(set) {
+  let command = 'npx tsc --init ';
+  for (let [key, value] of set.entries()) {
+    command += `${key} ${value} `;
+  }
+  const trimmedCommand = command.trim();
+  return trimmedCommand;
+}
