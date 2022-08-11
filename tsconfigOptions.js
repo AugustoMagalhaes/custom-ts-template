@@ -21,3 +21,25 @@ const tsconfigInfo = new Map([
   ['--forceConsistentCasingInFileNames', `(${tsconfigDocUrl}#forceConsistentCasingInFileNames)`],
   ['--preserveConstEnums', `(${tsconfigDocUrl}#preserveConstEnums)`],
 ]);
+
+async function askTsconfigOptions() {
+  for (let [key, value] of customTsconfig.entries()) {
+    console.clear();
+    const answer = await inquirer.prompt({
+      name: key,
+      type: 'list',
+      message: `Which config would you like to set for ${chalk.bold.green(
+        key,
+      )} of tsconfig's option? \n Doc: ${chalk.blue(tsconfigInfo.get(key))}:`,
+      choices: value,
+      default() {
+        return value[0];
+      },
+    });
+
+    customTsconfig.set(key, answer[key]);
+  }
+  await askRootAndOutdir('--rootDir', './src');
+  await askRootAndOutdir('--outDir', './dist');
+  return generateTsconfigCommand(customTsconfig);
+}
