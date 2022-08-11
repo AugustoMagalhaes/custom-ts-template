@@ -1,3 +1,6 @@
+import chalk from 'chalk';
+import inquirer from 'inquirer';
+
 const customTsconfig = new Map([
   ['--target', ['ES2015', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext']],
   ['--module', ['commonjs', 'es6', 'es2020', 'es2021', 'esnext', 'node16', 'nodenext']],
