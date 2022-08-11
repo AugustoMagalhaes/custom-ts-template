@@ -32,9 +32,9 @@ async function askTsconfigOptions() {
     const answer = await inquirer.prompt({
       name: key,
       type: 'list',
-      message: `Which config would you like to set for ${chalk.bold.green(
+      message: `Which config would you like to set for tsconfig's ${chalk.bold.green(
         key,
-      )} of tsconfig's option? \n Doc: ${chalk.blue(tsconfigInfo.get(key))}:`,
+      )} option? \n Doc: ${chalk.blue(tsconfigInfo.get(key))}`,
       choices: value,
       default() {
         return value[0];
@@ -60,7 +60,7 @@ async function askRootAndOutdir(dirOption, dirDefault) {
     type: 'input',
     message: `Please enter the destination of your custom ${chalk.green(
       dirOption,
-    )} directory: e.g ->`,
+    )} directory: (press 'Enter' for default)`,
     default() {
       return dirDefault;
     },
