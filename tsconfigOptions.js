@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 
 const customTsconfig = new Map([
-  ['--target', ['ES2015', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext']],
+  ['--target', ['es6', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext']],
   ['--module', ['commonjs', 'es6', 'es2020', 'es2021', 'esnext', 'node16', 'nodenext']],
   ['--allowJs', ['true', 'false']],
   ['--strict', ['true', 'false']],
@@ -28,6 +28,7 @@ const tsconfigInfo = new Map([
 async function askTsconfigOptions() {
   for (let [key, value] of customTsconfig.entries()) {
     console.clear();
+
     const answer = await inquirer.prompt({
       name: key,
       type: 'list',
@@ -42,22 +43,29 @@ async function askTsconfigOptions() {
 
     customTsconfig.set(key, answer[key]);
   }
-  await askRootAndOutdir('--rootDir', './src');
-  await askRootAndOutdir('--outDir', './dist');
+
+  Promise.all([
+    await askRootAndOutdir('--rootDir', './src'),
+    await askRootAndOutdir('--outDir', './dist'),
+  ]);
+
   return generateTsconfigCommand(customTsconfig);
 }
 
 async function askRootAndOutdir(dirOption, dirDefault) {
+  console.clear();
+
   const answers = await inquirer.prompt({
     name: dirOption,
     type: 'input',
-    message: `Please type the source of your ${chalk.green(
+    message: `Please enter the destination of your custom ${chalk.green(
       dirOption,
-    )} directory (e.g ${dirDefault}):`,
+    )} directory: e.g ->`,
     default() {
       return dirDefault;
     },
   });
+
   customTsconfig.set(dirOption, answers[dirOption]);
 }
 
