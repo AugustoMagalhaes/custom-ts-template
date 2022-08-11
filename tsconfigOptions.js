@@ -43,3 +43,17 @@ async function askTsconfigOptions() {
   await askRootAndOutdir('--outDir', './dist');
   return generateTsconfigCommand(customTsconfig);
 }
+
+async function askRootAndOutdir(dirOption, dirDefault) {
+  const answers = await inquirer.prompt({
+    name: dirOption,
+    type: 'input',
+    message: `Please type the source of your ${chalk.green(
+      dirOption,
+    )} directory (e.g ${dirDefault}):`,
+    default() {
+      return dirDefault;
+    },
+  });
+  customTsconfig.set(dirOption, answers[dirOption]);
+}
