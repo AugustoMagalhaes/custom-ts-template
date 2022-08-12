@@ -7,7 +7,7 @@ import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
 import util from 'util';
 
-const asyncExec = util.promisify(exec);
+export const asyncExec = util.promisify(exec);
 
 let nodeVersion = '';
 
