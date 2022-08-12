@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
+import { getNodeVersion } from './src/installer.js';
 
 const customTsconfig = new Map([
   ['--target', ['es6', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext']],
@@ -25,10 +26,29 @@ const tsconfigInfo = new Map([
   ['--preserveConstEnums', `(${tsconfigDocUrl}#preserveConstEnums)`],
 ]);
 
+async function askRecommendedOrCustomOptions() {
+  const nodeVersion = getNodeVersion();
+
+  const answer = await inquirer.prompt({
+    name: 'recommendedOrCustom',
+    type: 'list',
+    message: `Would you like to generate a recommended tsconfig for your node version (${nodeVersion}) or a custom one?`,
+    choices: ['Recommended', 'Custom'],
+    default() {
+      return 'Recommended';
+    },
+  });
+
+  if (answer.recommendedOrCustom === 'Recommended') {
+    console.log('not Implemented');
+  } else {
+    await askCustomTsConfigOptions();
+  }
+}
 async function askRootAndOutdir(dirOption, dirDefault) {
   console.clear();
 
-  const answers = await inquirer.prompt({
+  const answer = await inquirer.prompt({
     name: dirOption,
     type: 'input',
     message: `Please enter the destination of your custom ${chalk.green(
@@ -39,10 +59,10 @@ async function askRootAndOutdir(dirOption, dirDefault) {
     },
   });
 
-  customTsconfig.set(dirOption, answers[dirOption]);
+  customTsconfig.set(dirOption, answer[dirOption]);
 }
 
-async function askTsconfigOptions() {
+async function askCustomTsConfigOptions() {
   for (let [key, value] of customTsconfig.entries()) {
     console.clear();
 
