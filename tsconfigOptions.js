@@ -25,6 +25,23 @@ const tsconfigInfo = new Map([
   ['--preserveConstEnums', `(${tsconfigDocUrl}#preserveConstEnums)`],
 ]);
 
+async function askRootAndOutdir(dirOption, dirDefault) {
+  console.clear();
+
+  const answers = await inquirer.prompt({
+    name: dirOption,
+    type: 'input',
+    message: `Please enter the destination of your custom ${chalk.green(
+      dirOption,
+    )} directory: (press 'Enter' for default)`,
+    default() {
+      return dirDefault;
+    },
+  });
+
+  customTsconfig.set(dirOption, answers[dirOption]);
+}
+
 async function askTsconfigOptions() {
   for (let [key, value] of customTsconfig.entries()) {
     console.clear();
@@ -50,23 +67,6 @@ async function askTsconfigOptions() {
   ]);
 
   return generateTsconfigCommand(customTsconfig);
-}
-
-async function askRootAndOutdir(dirOption, dirDefault) {
-  console.clear();
-
-  const answers = await inquirer.prompt({
-    name: dirOption,
-    type: 'input',
-    message: `Please enter the destination of your custom ${chalk.green(
-      dirOption,
-    )} directory: (press 'Enter' for default)`,
-    default() {
-      return dirDefault;
-    },
-  });
-
-  customTsconfig.set(dirOption, answers[dirOption]);
 }
 
 function generateTsconfigCommand(set) {
