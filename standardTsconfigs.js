@@ -1,4 +1,4 @@
-export const node10 = {
+const node10 = {
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 10',
 
@@ -15,7 +15,7 @@ export const node10 = {
   },
 };
 
-export const node12 = {
+const node12 = {
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 12',
 
@@ -32,7 +32,7 @@ export const node12 = {
   },
 };
 
-export const node14 = {
+const node14 = {
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 14',
 
@@ -49,7 +49,7 @@ export const node14 = {
   },
 };
 
-export const node16 = {
+const node16 = {
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 16',
 
@@ -65,3 +65,12 @@ export const node16 = {
     moduleResolution: 'node',
   },
 };
+
+const allStandardOptions = {
+  node10,
+  node12,
+  node14,
+  node16,
+};
+
+export default allStandardOptions;
