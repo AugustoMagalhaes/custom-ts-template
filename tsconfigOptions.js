@@ -31,6 +31,26 @@ const secondaryTsConfigInfo = new Map([
   ['exclude', ['node_modules']],
 ]);
 
+async function handleChoices(choice) {
+  if (choice === 'none') {
+    secondaryTsConfigInfo.clear();
+    return;
+  }
+
+  const splitedChoice = choice.split('/');
+
+  if (splitedChoice.includes('include')) {
+    const rootDir = customTsconfig.get('--rootDir');
+    const includeDirContent = secondaryTsConfigInfo.get('include')[0];
+    const newIncludeDirContent = includeDirContent.replace('src', rootDir);
+    secondaryTsConfigInfo.set('include', [newIncludeDirContent]);
+  } else {
+    secondaryTsConfigInfo.delete('include');
+  }
+  const defaultExcludeValue = secondaryTsConfigInfo.get('exclude');
+  await askExcludeOption();
+}
+
 async function askYesOrNoIncludeExclude() {
   console.clear();
 
@@ -51,7 +71,7 @@ async function askYesOrNoIncludeExclude() {
 
   const resultAnswer = answer.includeOrExclude;
 
-  //await handleChoices(resultAnswer);
+  await handleChoices(resultAnswer);
 }
 
 async function askRecommendedOrCustomOptions() {
