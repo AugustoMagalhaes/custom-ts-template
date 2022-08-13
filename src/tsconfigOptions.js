@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
+import { writeRecommendedOptions } from '../helpers/writeTsconfig.js';
 import { getNodeVersion } from './installer.js';
 
 const customTsconfig = new Map([
@@ -172,7 +173,7 @@ async function askRecommendedOrCustomOptions() {
       await askRootAndOutdir('--rootDir', './src'),
       await askRootAndOutdir('--outDir', './dist'),
       await askYesOrNoIncludeExclude(),
-      // await fs...
+      await writeRecommendedOptions(secondaryTsConfigInfo),
     ]);
   } else {
     await askCustomTsConfigOptions();
