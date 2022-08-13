@@ -58,6 +58,11 @@ async function askExcludeOption() {
   }
 }
 
+function formatString(str, pattern, replacedStr) {
+  const formattedString = str.replace(pattern, replacedStr);
+  return formattedString;
+}
+
 async function handleChoices(choice) {
   if (choice === 'none') {
     secondaryTsConfigInfo.clear();
@@ -67,9 +72,9 @@ async function handleChoices(choice) {
   const splitedChoice = choice.split('/');
 
   if (splitedChoice.includes('include')) {
-    const rootDir = customTsconfig.get('--rootDir');
+    const rootDir = formatString(customTsconfig.get('--rootDir'), './', '');
     const includeDirContent = secondaryTsConfigInfo.get('include')[0];
-    const newIncludeDirContent = includeDirContent.replace('src', rootDir);
+    const newIncludeDirContent = formatString(includeDirContent, 'src', rootDir);
     secondaryTsConfigInfo.set('include', [newIncludeDirContent]);
   } else {
     secondaryTsConfigInfo.delete('include');
