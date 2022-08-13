@@ -21,9 +21,14 @@ const tsconfigInfo = new Map([
   ['--allowJs', `(${tsconfigDocUrl}#allowJs)`],
   ['--strict', `(${tsconfigDocUrl}#strict)`],
   ['--esModuleInterop', `(${tsconfigDocUrl}#esModuleInterop)`],
-  ['--skipLibCheck', `(${tsconfigDocUrl}#skipDefaultLibCheck`],
+  ['--skipLibCheck', `(${tsconfigDocUrl}#skipDefaultLibCheck)`],
   ['--forceConsistentCasingInFileNames', `(${tsconfigDocUrl}#forceConsistentCasingInFileNames)`],
   ['--preserveConstEnums', `(${tsconfigDocUrl}#preserveConstEnums)`],
+]);
+
+const secondaryTsConfigInfo = new Map([
+  ['include', ['src/**/*']],
+  ['exclude', ['node_modules']],
 ]);
 
 async function askRecommendedOrCustomOptions() {
