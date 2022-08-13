@@ -6,6 +6,7 @@ import fs from 'fs';
 import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
 import util from 'util';
+import sleep from '../helpers/sleep.js';
 
 export const asyncExec = util.promisify(exec);
 
@@ -13,8 +14,6 @@ let nodeVersion = '';
 
 let prodDependencies = new Set(['dotenv']);
 let devDependencies = new Set(['typescript', '@types/node', 'ts-node-dev']);
-
-const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 async function welcome() {
   console.clear();
