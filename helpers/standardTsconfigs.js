@@ -1,4 +1,5 @@
 const node10 = {
+  extends: '@tsconfig/node10/tsconfig.json',
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 10',
   compilerOptions: {
@@ -14,6 +15,7 @@ const node10 = {
 };
 
 const node12 = {
+  extends: '@tsconfig/node12/tsconfig.json',
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 12',
   compilerOptions: {
@@ -29,6 +31,7 @@ const node12 = {
 };
 
 const node14 = {
+  extends: '@tsconfig/node14/tsconfig.json',
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 14',
   compilerOptions: {
@@ -44,6 +47,7 @@ const node14 = {
 };
 
 const node16 = {
+  extends: '@tsconfig/node16/tsconfig.json',
   $schema: 'https://json.schemastore.org/tsconfig',
   display: 'Node 16',
 
