@@ -31,6 +31,33 @@ const secondaryTsConfigInfo = new Map([
   ['exclude', ['node_modules']],
 ]);
 
+async function askExcludeOption() {
+  console.clear();
+
+  const warningMessage = chalk.bold.yellow(
+    `Type only the content of the second array option, 'node_modules' comes by default... \n (e.g: type **/*.spec.ts (no quotes needed) for ["node_modules", "**/*.spec.ts"])`,
+  );
+
+  const answer = await inquirer.prompt({
+    name: 'exclude',
+    type: 'input',
+    message: `Please enter the destination of your custom ${chalk.green(
+      'exclude',
+    )} config: \n ${warningMessage} \n`,
+    default() {
+      return '**/*.spec.ts';
+    },
+  });
+
+  const resultAnswer = answer['exclude'];
+
+  if (resultAnswer) {
+    const defaultExcludeValue = secondaryTsConfigInfo.get('exclude');
+    const newExcludeValue = [...defaultExcludeValue, resultAnswer];
+    secondaryTsConfigInfo.set('exclude', newExcludeValue);
+  }
+}
+
 async function handleChoices(choice) {
   if (choice === 'none') {
     secondaryTsConfigInfo.clear();
@@ -47,7 +74,7 @@ async function handleChoices(choice) {
   } else {
     secondaryTsConfigInfo.delete('include');
   }
-  const defaultExcludeValue = secondaryTsConfigInfo.get('exclude');
+
   await askExcludeOption();
 }
 
