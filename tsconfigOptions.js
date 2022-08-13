@@ -31,6 +31,29 @@ const secondaryTsConfigInfo = new Map([
   ['exclude', ['node_modules']],
 ]);
 
+async function askYesOrNoIncludeExclude() {
+  console.clear();
+
+  const choices = ['include/exclude', 'exclude', 'none'];
+  const rootDirName = customTsconfig.get('--rootDir').replace('./', '');
+
+  const answer = await inquirer.prompt({
+    name: 'includeOrExclude',
+    type: 'list',
+    message: `Would you like to set ${chalk.green('include/exclude')} options? (${chalk.yellow(
+      'default',
+    )}: include: ['${rootDirName}/**/*'], exclude: ['node_modules', '**YourChoice**'])`,
+    choices,
+    default() {
+      return choices[0];
+    },
+  });
+
+  const resultAnswer = answer.includeOrExclude;
+
+  //await handleChoices(resultAnswer);
+}
+
 async function askRecommendedOrCustomOptions() {
   const nodeVersion = getNodeVersion();
 
