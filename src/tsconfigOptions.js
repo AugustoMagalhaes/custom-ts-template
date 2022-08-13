@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { getNodeVersion } from './src/installer.js';
+import { getNodeVersion } from './installer.js';
 
 const customTsconfig = new Map([
   ['--target', ['es6', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext']],
