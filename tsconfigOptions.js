@@ -102,6 +102,7 @@ async function askYesOrNoIncludeExclude() {
 }
 
 async function askRecommendedOrCustomOptions() {
+  console.clear();
   const nodeVersion = getNodeVersion();
 
   const answer = await inquirer.prompt({
@@ -115,7 +116,12 @@ async function askRecommendedOrCustomOptions() {
   });
 
   if (answer.recommendedOrCustom === 'Recommended') {
-    console.log('not Implemented');
+    Promise.all([
+      await askRootAndOutdir('--rootDir', './src'),
+      await askRootAndOutdir('--outDir', './dist'),
+      await askYesOrNoIncludeExclude(),
+      // await fs...
+    ]);
   } else {
     await askCustomTsConfigOptions();
   }
@@ -172,3 +178,7 @@ function generateTsconfigCommand(set) {
   const trimmedCommand = command.trim();
   return trimmedCommand;
 }
+
+await askRecommendedOrCustomOptions();
+console.log(customTsconfig);
+console.log(secondaryTsConfigInfo);
