@@ -132,8 +132,7 @@ async function installDependencies() {
     console.log(`\n ${stdout}`);
 
     spinner.success({ text: chalk.bold.green('Dependencies installed!') });
-
-    return stdout;
+    await sleep(3000);
   } catch (e) {
     spinner.error({ text: chalk.red(e.message) });
   }
