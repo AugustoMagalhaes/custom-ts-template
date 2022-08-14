@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
 import sleep from '../helpers/sleep.js';
-import { writeRecommendedOptions } from '../helpers/writeTsconfig.js';
+import { writeCustomOptions, writeRecommendedOptions } from '../helpers/writeTsconfig.js';
 import { asyncExec, getNodeVersion } from './installer.js';
 
 const customTsconfig = new Map([
@@ -165,11 +165,14 @@ async function askCustomTsConfigOptions() {
     customTsconfig.set(key, answer[key]);
   }
 
+  const nodeVersion = getNodeVersion();
+
   Promise.all([
     await askRootAndOutdir('--rootDir', './src'),
     await askRootAndOutdir('--outDir', './dist'),
     await askYesOrNoIncludeExclude(),
     await generateCustomTsconfig(),
+    await writeCustomOptions(secondaryTsConfigInfo, nodeVersion || 16),
   ]);
 }
 

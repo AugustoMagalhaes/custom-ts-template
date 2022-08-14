@@ -55,7 +55,6 @@ const node16 = {
     lib: ['es2021'],
     module: 'commonjs',
     target: 'es2021',
-
     strict: true,
     esModuleInterop: true,
     skipLibCheck: true,
