@@ -130,7 +130,7 @@ async function askRootAndOutdir(dirOption, dirDefault) {
 
 async function generateCustomTsconfig() {
   const spinner = createSpinner(chalk.green('Generating custom tsconfig.json ...')).start();
-  sleep();
+  await sleep();
 
   try {
     const command = generateTsconfigCommand(customTsconfig);
