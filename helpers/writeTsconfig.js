@@ -26,15 +26,22 @@ export async function writeRecommendedOptions(secondaryMap, nodeVersion = 16) {
 
 export async function writeCustomOptions(secondaryMap, nodeVersion = 16) {
   const parsedTsConfig = await readAndParse();
+
   if (parsedTsConfig) {
     parsedTsConfig['extends'] = `@tsconfig/node${nodeVersion}/tsconfig.json`;
 
     for (let [key, value] of secondaryMap.entries()) {
-      parsedTsConfig.compilerOptions[key] = value;
+      parsedTsConfig[key] = value;
     }
-    console.log(secondaryMap);
-    console.log(parsedTsConfig);
+  }
+  const stringifiedCustomTsconfig = JSON.stringify(parsedTsConfig, null, 2);
+
+  try {
+    const spinner = createSpinner(chalk.green('Customizing tsconfig.json data ...')).start();
+    await fs.writeFile('./tsconfig.json', stringifiedCustomTsconfig);
+    await sleep();
+    spinner.success({ text: chalk.bold.green('tsconfig.json customized sucessfully!') });
+  } catch (err) {
+    spinner.error({ text: chalk.red(e.message) });
   }
 }
-
-await writeCustomOptions(16, { id: 2 });
