@@ -174,7 +174,7 @@ async function askCustomTsConfigOptions() {
   ]);
 }
 
-async function askRecommendedOrCustomOptions() {
+export default async function askRecommendedOrCustomOptions() {
   console.clear();
   const nodeVersion = getNodeVersion();
 
@@ -193,7 +193,7 @@ async function askRecommendedOrCustomOptions() {
       await askRootAndOutdir('--rootDir', './src'),
       await askRootAndOutdir('--outDir', './dist'),
       await askYesOrNoIncludeExclude(),
-      await writeRecommendedOptions(secondaryTsConfigInfo /* nodeVersion */),
+      await writeRecommendedOptions(secondaryTsConfigInfo, nodeVersion),
     ]);
   } else {
     await askCustomTsConfigOptions();
@@ -208,5 +208,3 @@ function generateTsconfigCommand(set) {
   const trimmedCommand = command.trim();
   return trimmedCommand;
 }
-
-await askRecommendedOrCustomOptions();
