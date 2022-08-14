@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import { createSpinner } from 'nanospinner';
+import readAndParse from './readTsconfig.js';
 import sleep from './sleep.js';
 import allStandardOptions from './standardTsconfigs.js';
 
@@ -22,3 +23,18 @@ export async function writeRecommendedOptions(secondaryMap, nodeVersion = 16) {
     spinner.error({ text: chalk.red(e.message) });
   }
 }
+
+export async function writeCustomOptions(secondaryMap, nodeVersion = 16) {
+  const parsedTsConfig = await readAndParse();
+  if (parsedTsConfig) {
+    parsedTsConfig['extends'] = `@tsconfig/node${nodeVersion}/tsconfig.json`;
+
+    for (let [key, value] of secondaryMap.entries()) {
+      parsedTsConfig.compilerOptions[key] = value;
+    }
+    console.log(secondaryMap);
+    console.log(parsedTsConfig);
+  }
+}
+
+await writeCustomOptions(16, { id: 2 });
