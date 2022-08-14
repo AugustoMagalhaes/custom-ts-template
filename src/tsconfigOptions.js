@@ -1,7 +1,9 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
+import { createSpinner } from 'nanospinner';
+import sleep from '../helpers/sleep.js';
 import { writeRecommendedOptions } from '../helpers/writeTsconfig.js';
-import { getNodeVersion } from './installer.js';
+import { asyncExec, getNodeVersion } from './installer.js';
 
 const customTsconfig = new Map([
   ['--target', ['es6', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext']],
@@ -126,6 +128,24 @@ async function askRootAndOutdir(dirOption, dirDefault) {
   customTsconfig.set(dirOption, resultAnswer);
 }
 
+async function generateCustomTsconfig() {
+  const spinner = createSpinner(chalk.green('Generating custom tsconfig.json ...')).start();
+  sleep();
+
+  try {
+    const command = generateTsconfigCommand(customTsconfig);
+    const { stdout, _stderr } = await asyncExec(command);
+
+    console.log(`\n ${stdout}`);
+
+    spinner.success({ text: chalk.bold.green('Custom tsconfig.json created sucessfully!') });
+
+    return stdout;
+  } catch (e) {
+    spinner.error({ text: chalk.red(e.message) });
+  }
+}
+
 async function askCustomTsConfigOptions() {
   for (let [key, value] of customTsconfig.entries()) {
     console.clear();
@@ -149,9 +169,8 @@ async function askCustomTsConfigOptions() {
     await askRootAndOutdir('--rootDir', './src'),
     await askRootAndOutdir('--outDir', './dist'),
     await askYesOrNoIncludeExclude(),
+    await generateCustomTsconfig(),
   ]);
-
-  return generateTsconfigCommand(customTsconfig);
 }
 
 async function askRecommendedOrCustomOptions() {
@@ -173,7 +192,7 @@ async function askRecommendedOrCustomOptions() {
       await askRootAndOutdir('--rootDir', './src'),
       await askRootAndOutdir('--outDir', './dist'),
       await askYesOrNoIncludeExclude(),
-      await writeRecommendedOptions(secondaryTsConfigInfo),
+      await writeRecommendedOptions(secondaryTsConfigInfo /* nodeVersion */),
     ]);
   } else {
     await askCustomTsConfigOptions();
