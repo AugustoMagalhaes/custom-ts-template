@@ -136,8 +136,6 @@ async function generateCustomTsconfig() {
     const command = generateTsconfigCommand(customTsconfig);
     const { stdout, _stderr } = await asyncExec(command);
 
-    console.log(`\n ${stdout}`);
-
     spinner.success({ text: chalk.bold.green('Custom tsconfig.json created sucessfully!') });
 
     return stdout;
