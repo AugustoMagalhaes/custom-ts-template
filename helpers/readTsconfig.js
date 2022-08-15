@@ -12,7 +12,7 @@ export async function customRead(path) {
 }
 export default async function readAndParse() {
   try {
-    let data = await read('./tsconfig.json');
+    let data = await customRead('./tsconfig.json');
     const commentlessData = stripComments(data);
 
     const parsedData = JSON.parse(commentlessData);
