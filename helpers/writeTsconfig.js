@@ -14,8 +14,8 @@ export async function writeRecommendedOptions(secondaryMap, nodeVersion = 16) {
 
   const stringifiedRecommendedConfig = JSON.stringify(recommendedConfig, null, 2);
 
+  const spinner = createSpinner(chalk.green('Generating tsconfig.json ...')).start();
   try {
-    const spinner = createSpinner(chalk.green('Generating tsconfig.json ...')).start();
     await fs.writeFile('./tsconfig.json', stringifiedRecommendedConfig);
     await sleep();
     spinner.success({ text: chalk.bold.green('tsconfig.json created sucessfully!') });
@@ -36,8 +36,8 @@ export async function writeCustomOptions(secondaryMap, nodeVersion = 16) {
   }
   const stringifiedCustomTsconfig = JSON.stringify(parsedTsConfig, null, 2);
 
+  const spinner = createSpinner(chalk.green('Customizing tsconfig.json data ...')).start();
   try {
-    const spinner = createSpinner(chalk.green('Customizing tsconfig.json data ...')).start();
     await fs.writeFile('./tsconfig.json', stringifiedCustomTsconfig);
     await sleep();
     spinner.success({ text: chalk.bold.green('tsconfig.json customized sucessfully!') });
