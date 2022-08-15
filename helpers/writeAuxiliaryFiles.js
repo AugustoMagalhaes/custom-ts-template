@@ -1,12 +1,12 @@
+import chalk from 'chalk';
 import fs from 'fs/promises';
 import { createSpinner } from 'nanospinner';
-import { customRead } from './readTsconfig.js';
+import sleep from './sleep.js';
 
-export default async function writeAuxFiles(contentPath, writePath, name) {
+export default async function writeAuxFiles(contentFile, writePath, name) {
+  const spinner = createSpinner(chalk.green(`Generating ${name} ...`)).start();
   try {
-    const spinner = createSpinner(chalk.green(`Generating ${name} ...`)).start();
-    const data = await customRead(contentPath);
-    await fs.writeFile(writePath, data);
+    await fs.writeFile(writePath, contentFile);
     await sleep();
     spinner.success({ text: chalk.bold.green(`${name} created sucessfully!`) });
   } catch (err) {
