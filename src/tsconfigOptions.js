@@ -5,7 +5,7 @@ import sleep from '../helpers/sleep.js';
 import { writeCustomOptions, writeRecommendedOptions } from '../helpers/writeTsconfig.js';
 import { asyncExec, getNodeVersion } from './installer.js';
 
-const customTsconfig = new Map([
+export const customTsconfig = new Map([
   ['--target', ['es6', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext']],
   ['--module', ['commonjs', 'es6', 'es2020', 'es2021', 'esnext', 'node16', 'nodenext']],
   ['--allowJs', ['true', 'false']],
@@ -123,7 +123,7 @@ async function askRootAndOutdir(dirOption, dirDefault) {
     },
   });
 
-  const resultAnswer = answer[dirOption];
+  const resultAnswer = './'.concat(answer[dirOption]);
 
   customTsconfig.set(dirOption, resultAnswer);
 }
@@ -166,8 +166,8 @@ async function askCustomTsConfigOptions() {
   const nodeVersion = getNodeVersion();
 
   Promise.all([
-    await askRootAndOutdir('--rootDir', './src'),
-    await askRootAndOutdir('--outDir', './dist'),
+    await askRootAndOutdir('--rootDir', 'src'),
+    await askRootAndOutdir('--outDir', 'dist'),
     await askYesOrNoIncludeExclude(),
     await generateCustomTsconfig(),
     await writeCustomOptions(secondaryTsConfigInfo, nodeVersion || 16),
@@ -190,8 +190,8 @@ export default async function askRecommendedOrCustomOptions() {
 
   if (answer.recommendedOrCustom === 'Recommended') {
     Promise.all([
-      await askRootAndOutdir('--rootDir', './src'),
-      await askRootAndOutdir('--outDir', './dist'),
+      await askRootAndOutdir('--rootDir', 'src'),
+      await askRootAndOutdir('--outDir', 'dist'),
       await askYesOrNoIncludeExclude(),
       await writeRecommendedOptions(secondaryTsConfigInfo, nodeVersion),
     ]);
