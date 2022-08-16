@@ -17,7 +17,7 @@ export async function farewellMessage() {
   console.log(gradient.pastel('-'.repeat(process.stdout.columns)), '\n');
   console.log(
     chalk.bold.green(
-      'This script was made by AugustoMagalhaes (https://github.com/AugustoMagalhaes)',
+      'This script was made by AugustoMagalhaes (https://github.com/AugustoMagalhaes/custom-ts-template)',
     ),
   );
   console.log(chalk.bold.white.bgGreen('Any suggestions and comments are appreciated :) \n'));
