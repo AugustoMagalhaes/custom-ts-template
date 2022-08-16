@@ -1,10 +1,10 @@
 {
-  "name": "create-ts-template",
+  "name": "custom-ts-template",
   "version": "0.0.1",
   "description": "Script for creating a template for Typescript with CLI",
   "main": "index.js",
   "bin": {
-    "create-ts-template": "/bin/cli.js"
+    "custom-ts-template": "/bin/cli.js"
   },
   "type": "module",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AugustoMagalhaes/create-ts-template.git"
+    "url": "https://github.com:AugustoMagalhaes/custom-ts-template.git"
   },
   "keywords": [
     "typescript",
@@ -23,9 +23,9 @@
   "author": "AugustoMagalhaes",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AugustoMagalhaes/create-ts-template/issues"
+    "url": "https://github.com/AugustoMagalhaes/custom-ts-template/issues"
   },
-  "homepage": "https://github.com/AugustoMagalhaes/create-ts-template",
+  "homepage": "https://github.com/AugustoMagalhaes/custom-ts-template",
   "dependencies": {
     "chalk": "^5.0.1",
     "chalk-animation": "^2.0.2",
