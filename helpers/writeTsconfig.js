@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import { createSpinner } from 'nanospinner';
+import { customTsconfig } from '../src/tsconfigOptions.js';
 import readAndParse from './readTsconfig.js';
 import sleep from './sleep.js';
 import allStandardOptions from './standardTsconfigs.js';
@@ -11,6 +12,8 @@ export async function writeRecommendedOptions(secondaryMap, nodeVersion = 16) {
   for (let [key, value] of secondaryMap.entries()) {
     recommendedConfig[key] = value;
   }
+  recommendedConfig.compilerOptions['rootDir'] = customTsconfig.get('--rootDir');
+  recommendedConfig.compilerOptions['outDir'] = customTsconfig.get('--outDir');
 
   const stringifiedRecommendedConfig = JSON.stringify(recommendedConfig, null, 2);
 
