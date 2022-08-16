@@ -1,12 +1,12 @@
-<h1 id="nome-do-projeto">Typescript template creator </h1>
+<h1 id="nome-do-projeto">Typescript custom template creator </h1>
 
 ## English
 
-![GitHub repo size](https://img.shields.io/github/repo-size/AugustoMagalhaes/create-ts-template?color=%234ec66e&label=GitHub%20Repo%20Size)
-![GitHub language count](https://img.shields.io/github/languages/count/AugustoMagalhaes/create-ts-template?color=%234ec66e)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/AugustoMagalhaes/create-ts-template?color=%234e8ac6)
+![GitHub repo size](https://img.shields.io/github/repo-size/AugustoMagalhaes/custom-ts-template?color=%234ec66e&label=GitHub%20Repo%20Size)
+![GitHub language count](https://img.shields.io/github/languages/count/AugustoMagalhaes/custom-ts-template?color=%234ec66e)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/AugustoMagalhaes/custom-ts-template?color=%234e8ac6)
 
-> `npx create-ts-template`'s repository, which allows user to execute a simple CLI application to customize dependencies installation <i>and</i> generation/settings of tsconfig.json in Typescript projects with or without express.
+> `npx custom-ts-template`'s repository, which allows user to execute a simple CLI application to customize dependencies installation <i>and</i> generation/settings of tsconfig.json in Typescript projects with or without express.
 
 ### :computer: About the project
 
@@ -76,7 +76,7 @@ The project have been made in Javascript, and used the following libs:
    type the command:
 
 ```npm
-npx create-ts-template
+npx custom-ts-template
 ```
 
 The executable will install the necessary dependencies and automatically launch the Typescript template generation CLI.
@@ -86,7 +86,7 @@ or
 2. Type the command:
 
 ```npm
-npm install create-ts-template
+npm install custom-ts-template
 ```
 
 The installer will generate a 'clone' of the project with an index.js file that can be run with `npm start`. As the central idea of ​​the project is to create files in the root folder in which it is running, this method is not recommended as it will overwrite possible files already initialized by the installation, such as .gitignore, package.json, package-lock.json, etc.
@@ -97,7 +97,7 @@ The installer will generate a 'clone' of the project with an index.js file that 
 
 ## Português:
 
-> Repositório do `npx create-ts-template` que permite ao usuário executar uma aplicação simples de CLI para customizar instalação de dependências <i>e</i> criação/configuração do tsconfig.json em projetos Typescript com ou sem express.
+> Repositório do `npx custom-ts-template` que permite ao usuário executar uma aplicação simples de CLI para customizar instalação de dependências <i>e</i> criação/configuração do tsconfig.json em projetos Typescript com ou sem express.
 
 ### :computer: Sobre o projeto
 
@@ -165,7 +165,7 @@ O projeto foi feito em Javascript, utilizando as seguintes bibliotecas:
    Digite o comando:
 
 ```npm
-npx create-ts-template
+npx custom-ts-template
 ```
 
 O executável irá instalar as dependências necessárias e automaticamente iniciar o CLI de geração de templates Typescript.
@@ -175,7 +175,7 @@ ou
 2. Digite o comando:
 
 ```npm
-npm install create-ts-template
+npm install custom-ts-template
 ```
 
 O instalador irá gerar um 'clone' do projeto com um arquivo index.js que pode ser executado com `npm start`. Como a ideia central do projeto é criar arquivos na pasta raiz na qual está sendo executado, este método não é recomendado pois irá sobrescrever possíveis arquivos já inicializados pela instalação, como o .gitignore, package.json, package-lock.json, etc.
