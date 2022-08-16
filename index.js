@@ -7,8 +7,7 @@ import writeAuxFiles from './helpers/writeAuxiliaryFiles.js';
 import { mainInstaller } from './src/installer.js';
 import askRecommendedOrCustomOptions from './src/tsconfigOptions.js';
 
-// check if file is main module to avoid autorun when importing index.js
-if (import.meta.url === `file://${process.argv[1]}`) {
+export default async function main() {
   await mainInstaller();
 
   await askRecommendedOrCustomOptions();
@@ -16,4 +15,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   await writeAuxFiles(gitignoreContent, './.gitignore', '.gitignore');
 
   await farewellMessage();
+}
+
+// check if file is main module to avoid autorun when importing index.js
+if (import.meta.url === `file://${process.argv[1]}`) {
+  await main();
 }
