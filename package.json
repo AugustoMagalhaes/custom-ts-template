@@ -1,6 +1,6 @@
 {
   "name": "custom-ts-template",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Script for creating a custom template for Typescript with CLI",
   "main": "index.js",
   "bin": {
