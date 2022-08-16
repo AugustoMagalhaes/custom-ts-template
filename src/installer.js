@@ -18,7 +18,9 @@ let devDependencies = new Set(['typescript', '@types/node', 'ts-node-dev']);
 async function welcome() {
   console.clear();
 
-  const rainbowTitle = chalkAnimation.rainbow('Welcome to the Typescript template creator! \n');
+  const rainbowTitle = chalkAnimation.rainbow(
+    'Welcome to the custom Typescript template creator! \n',
+  );
 
   await sleep();
 
