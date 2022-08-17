@@ -1,6 +1,6 @@
 {
   "name": "custom-ts-template",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Script for creating a custom template for Typescript with CLI",
   "main": "index.js",
   "bin": {
@@ -13,12 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com:AugustoMagalhaes/custom-ts-template.git"
+    "url": "https://github.com/AugustoMagalhaes/custom-ts-template.git"
   },
   "keywords": [
     "typescript",
     "tsconfig",
-    "express"
+    "express",
+    "template",
+    "node"
   ],
   "author": "AugustoMagalhaes",
   "license": "ISC",

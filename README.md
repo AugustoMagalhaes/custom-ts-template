@@ -58,6 +58,8 @@ The project is still in-progress and has the following functionalities:
 
 * [x] Generates a .gitignore based on Toptal's.
 
+* [ ] Adds possibility to generate the template in a customized directory.
+
 #### Techs used
 
 The project have been made in Javascript, and used the following libs:
@@ -80,6 +82,8 @@ npx custom-ts-template
 ```
 
 The executable will install the necessary dependencies and automatically launch the Typescript template generation CLI.
+
+**IMPORTANT**: You need to enter the directory where you want to create the project and then run the command.
 
 or
 
@@ -148,6 +152,8 @@ O projeto ainda está em desenvolvimento e possui as seguintes funcionalidades:
 
 * [x] Gera um .gitignore de acordo com as recomendações da Toptal.
 
+* [ ] Adiciona possibilidade de gerar o template em um diretório customizado.
+
 #### Tecnologias utilizadas
 
 O projeto foi feito em Javascript, utilizando as seguintes bibliotecas:
@@ -169,6 +175,8 @@ npx custom-ts-template
 ```
 
 O executável irá instalar as dependências necessárias e automaticamente iniciar o CLI de geração de templates Typescript.
+
+**IMPORTANTE**: Você precisa entrar no diretório que deseja criar o projeto e depois rodar o comando.
 
 ou
 
