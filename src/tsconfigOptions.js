@@ -170,7 +170,7 @@ async function askCustomTsConfigOptions() {
     await askRootAndOutdir('--outDir', 'dist'),
     await askYesOrNoIncludeExclude(),
     await generateCustomTsconfig(),
-    await writeCustomOptions(secondaryTsConfigInfo, nodeVersion || 16),
+    await writeCustomOptions(secondaryTsConfigInfo, nodeVersion),
   ]);
 }
 
